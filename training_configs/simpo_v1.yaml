@@ -2,21 +2,15 @@
 model_name_or_path: mistralai/Mistral-7B-Instruct-v0.3
 gradient_checkpointing: true
 gradient_checkpointing_kwargs:
-    use_reentrant: True
+  use_reentrant: True
 use_peft: True
 lora_r: 16
 
-# data_args:
-dataset_mixer: 
-  /home/aboriskin/DPO/data/amazon_reviews.csv: 1.0
-
-dataset_splits:
-- train
-- test
 preprocessing_num_workers: 12
 
 # training_args:
-output_dir: /home/aboriskin/DPO/models_raw/Mistral-7B-Instruct-v0.3_bf16_simpo_v1
+dataset_name: data/dpo_dataset.csv
+output_dir: models_raw/Mistral-7B-Instruct-v0.3_bf16_simpo_v1
 run_name: Mistral-7B-Instruct-v0.3_bf16_simpo_v1
 
 loss_type: simpo

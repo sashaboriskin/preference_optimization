@@ -1,39 +1,29 @@
 from datasets import load_from_disk
 from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
 
-import hydra
-from omegaconf import DictConfig, OmegaConf
-from trl import CPOConfig, CPOTrainer, ScriptArguments
-from trl.trainer.utils import SIMPLE_CHAT_TEMPLATE
 import os
 
 from trl import (
-    KTOConfig,
-    KTOTrainer,
+    CPOConfig, 
+    CPOTrainer, 
+    ScriptArguments,
     ModelConfig,
     ScriptArguments,
     TrlParser
 )
 
-from alignment import (
-    get_peft_config,
-    H4ArgumentParser,
-    ModelArguments,
-    DataArguments,
-)
+from alignment import get_peft_config
 
 os.environ["WANDB_PROJECT"] = "preference_optimization"
 
 def main():
-    parser = TrlParser((ModelArguments, DataArguments, CPOConfig))
-    model_args, data_args, training_args = parser.parse()
-
-    parser = TrlParser((ScriptArguments, KTOConfig, ModelConfig))
+    parser = TrlParser((ScriptArguments, CPOConfig, ModelConfig))
     script_args, training_args, model_args = parser.parse_args_and_config()
 
-    ################
-    # Model & Tokenizer
-    ################
+
+    # ################
+    # # Model & Tokenizer
+    # ################
     model = AutoModelForCausalLM.from_pretrained(
         model_args.model_name_or_path
     )
@@ -44,7 +34,7 @@ def main():
     ################
     # Dataset
     ################
-    dataset = load_from_disk(list(data_args.dataset_mixer.keys())[0])
+    dataset = load_from_disk(script_args.dataset_name)
 
     print(dataset)
     print(type(dataset['train'][0]['chosen']))
@@ -62,14 +52,10 @@ def main():
     )
 
     # train and save the model
-    checkpoint = None
-    if training_args.resume_from_checkpoint is not None:
-        checkpoint = training_args.resume_from_checkpoint
-    elif last_checkpoint is not None:
-        checkpoint = last_checkpoint
-    train_result = trainer.train(resume_from_checkpoint=checkpoint)
+        
+    train_result = trainer.train()
     metrics = train_result.metrics
-    metrics["train_samples"] = len(raw_datasets["train"])
+    metrics["train_samples"] = len(dataset["train"])
     trainer.log_metrics("train", metrics)
     trainer.save_metrics("train", metrics)
     trainer.save_state()
