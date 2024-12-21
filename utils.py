@@ -4,3 +4,6 @@ def split_chosen_rejected(example):
         "chosen": [item["content"] for item in eval(example["completion"])["chosen"]][0],
         "rejected": [item["content"] for item in eval(example["completion"])["rejected"]][0],
     }
+
+def split_prompt_completion_target(example): 
+    pass

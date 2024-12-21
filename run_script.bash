@@ -7,7 +7,6 @@ pip install trl -U deepspeed
 echo "${PWD}"
 
 ACCELERATE_LOG_LEVEL=info accelerate launch --config_file ${PWD}/accelerate_configs/deepspeed_zero3.yaml ${PWD}/simpo.py --config ${PWD}/training_configs/simpo_v1.yaml
-
 pip install peft -q
 
 python3 merge_lora.py \

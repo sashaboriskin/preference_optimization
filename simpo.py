@@ -1,8 +1,7 @@
-from datasets import load_dataset, DatasetDict
-from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
-
 import os
 
+from datasets import load_dataset, DatasetDict
+from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
 from trl import (
     CPOConfig, 
     CPOTrainer, 
@@ -36,6 +35,7 @@ def main():
     # Dataset
     ################
     dataset = load_dataset("csv", data_files=script_args.dataset_name)
+    dataset['train'] = dataset['train'].shuffle(seed=training_args.seed) 
     dataset['train'] = dataset['train'].map(split_chosen_rejected)
     dataset = dataset['train'].train_test_split(test_size=0.2, seed=training_args.seed)
 
@@ -61,9 +61,14 @@ def main():
     # train and save the model
     train_result = trainer.train()
     metrics = train_result.metrics
+    #test_metrics = trainer.evaluate()
+
     metrics["train_samples"] = len(dataset["train"])
+    metrics["test_samples"] = len(dataset["test"])
     trainer.log_metrics("train", metrics)
+    trainer.log_metrics("test", metrics)
     trainer.save_metrics("train", metrics)
+    trainer.save_metrics("test", metrics)
     trainer.save_state()
 
     # Save and push to hub
