@@ -9,7 +9,7 @@ lora_r: 16
 preprocessing_num_workers: 12
 
 # data_args:
-dataset_name: /home/a.boriskin/preference_optimization/data/dpo_dataset.csv
+dataset_name: data/dpo_dataset.csv
 
 # training_args:
 output_dir: models_raw/Mistral-7B-Instruct-v0.3_bf16_simpo_v1
@@ -20,7 +20,7 @@ cpo_alpha: 0
 beta: 7
 simpo_gamma: 5
 
-num_epochs: 4
+num_epochs: 1
 max_prompt_length: 1024
 per_device_train_batch_size: 16
 per_device_eval_batch_size: 16

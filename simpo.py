@@ -13,6 +13,7 @@ from trl import (
 )
 
 from alignment import get_peft_config
+from utils import split_chosen_rejected
 
 os.environ["WANDB_PROJECT"] = "preference_optimization"
 
@@ -20,14 +21,6 @@ def main():
     parser = TrlParser((ScriptArguments, CPOConfig, ModelConfig))
     script_args, training_args, model_args = parser.parse_args_and_config()
 
-    print("script_args")
-    print(script_args)
-
-    print("training_args")
-    print(training_args)
-
-    print("model_args")
-    print(model_args)
     # ################
     # # Model & Tokenizer
     # ################
@@ -37,50 +30,46 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(
         model_args.model_name_or_path
     )
-    #print(script_args)
+    tokenizer.pad_token = tokenizer.eos_token
+
     ################
     # Dataset
     ################
-    print('DATASET')
-    print(os.getcwd())
-    #print(model_args.dataset_name)
     dataset = load_dataset("csv", data_files=script_args.dataset_name)
-
-    train_test_split = dataset.train_test_split(test_size=0.2, seed=42)
+    dataset['train'] = dataset['train'].map(split_chosen_rejected)
+    dataset = dataset['train'].train_test_split(test_size=0.2, seed=training_args.seed)
 
     dataset = DatasetDict({
-        "train": train_test_split["train"],
-        "test": train_test_split["test"]
+        "train": dataset["train"],
+        "test": dataset["test"]
     })
+    print(dataset['train'][0]['prompt'])
+    print(dataset['train'][0]['chosen'])
 
-    print(dataset)
-    # print(type(dataset['train'][0]['chosen']))
+    ###############
+    # Training
+    ###############
+    trainer = CPOTrainer(
+        model,
+        args=training_args,
+        train_dataset=dataset['train'],
+        eval_dataset=dataset['test'],
+        processing_class=tokenizer,
+        peft_config=get_peft_config(model_args),
+    )
 
-#     ################
-#     # Training
-#     ################
-#     trainer = CPOTrainer(
-#         model,
-#         args=training_args,
-#         train_dataset=dataset['train'],
-#         eval_dataset=dataset['test'],
-#         processing_class=tokenizer,
-#         peft_config=get_peft_config(model_args),
-#     )
+    # train and save the model
+    train_result = trainer.train()
+    metrics = train_result.metrics
+    metrics["train_samples"] = len(dataset["train"])
+    trainer.log_metrics("train", metrics)
+    trainer.save_metrics("train", metrics)
+    trainer.save_state()
 
-#     # train and save the model
-        
-#     train_result = trainer.train()
-#     metrics = train_result.metrics
-#     metrics["train_samples"] = len(dataset["train"])
-#     trainer.log_metrics("train", metrics)
-#     trainer.save_metrics("train", metrics)
-#     trainer.save_state()
-
-#     # Save and push to hub
-#     trainer.save_model(training_args.output_dir)
-#     if training_args.push_to_hub:
-#         trainer.push_to_hub(dataset_name=script_args.dataset_name)
+    # Save and push to hub
+    trainer.save_model(training_args.output_dir)
+    if training_args.push_to_hub:
+        trainer.push_to_hub(dataset_name=script_args.dataset_name)
 
 if __name__ == "__main__":
     main()
