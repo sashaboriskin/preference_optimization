@@ -8,8 +8,10 @@ lora_r: 16
 
 preprocessing_num_workers: 12
 
+# data_args:
+dataset_name: /home/a.boriskin/preference_optimization/data/dpo_dataset.csv
+
 # training_args:
-dataset_name: data/dpo_dataset.csv
 output_dir: models_raw/Mistral-7B-Instruct-v0.3_bf16_simpo_v1
 run_name: Mistral-7B-Instruct-v0.3_bf16_simpo_v1
 
