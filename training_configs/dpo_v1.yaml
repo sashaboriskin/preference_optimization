@@ -4,9 +4,16 @@ gradient_checkpointing: true
 gradient_checkpointing_kwargs:
     use_reentrant: True
 use_peft: True
-lora_r: 128
-lora_alpha: 128
+lora_r: 16
 lora_dropout: 0.05
+# target_modules:
+#   - q_proj
+#   - k_proj
+#   - v_proj
+#   - o_proj
+#   - gate_proj
+#   - up_proj
+#   - down_proj
 
 resume_from_checkpoint: true
 
@@ -15,16 +22,18 @@ dataset_name: data/dpo_dataset.csv
 
 # training_args:
 output_dir: models_raw/Mistral-7B-Instruct-v0.3_bf16_dpo_v1
+run_name: Mistral-7B-Instruct-v0.3_bf16_dpo_v1
 
 beta: 0.01
 num_train_epochs: 10
+max_steps: 2000
 max_prompt_length: 1024
-per_device_train_batch_size: 8
-per_device_eval_batch_size: 8
+per_device_train_batch_size: 16
+per_device_eval_batch_size: 16
 learning_rate: 5.0e-6
 gradient_accumulation_steps: 4
 logging_steps: 10
-eval_steps: 20
+eval_steps: 100
 
 optim: adamw_torch
 lr_scheduler_type: cosine
