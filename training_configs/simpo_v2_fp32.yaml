@@ -1,0 +1,42 @@
+# model_args:
+model_name_or_path: mistralai/Mistral-7B-Instruct-v0.3
+gradient_checkpointing: true
+gradient_checkpointing_kwargs:
+  use_reentrant: True
+use_peft: True
+lora_r: 16
+
+preprocessing_num_workers: 12
+
+# data_args:
+dataset_name: data/dpo_dataset.csv
+
+# training_args:
+output_dir: models_raw/Mistral-7B-Instruct-v0.3_bf32_simpo_v1
+run_name: Mistral-7B-Instruct-v0.3_bf32_simpo_v1
+
+loss_type: simpo
+cpo_alpha: 0
+beta: 0.1
+simpo_gamma: 0.8
+
+num_epochs: 1
+max_length: 1024
+max_prompt_length: 1024
+per_device_train_batch_size: 8
+per_device_eval_batch_size: 8
+learning_rate: 1.0e-7
+logging_steps: 10
+eval_steps: 200
+
+optim: adamw_torch
+lr_scheduler_type: constant
+
+save_total_limit: 20
+seed: 42
+
+warmup_steps: 0
+report_to:
+  - wandb
+#bf16: True
+logging_first_step: True
