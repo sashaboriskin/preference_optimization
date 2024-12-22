@@ -20,9 +20,9 @@ def main():
     parser = TrlParser((ScriptArguments, CPOConfig, ModelConfig))
     script_args, training_args, model_args = parser.parse_args_and_config()
 
-    # ################
-    # # Model & Tokenizer
-    # ################
+    ################
+    # Model & Tokenizer
+    ################
     model = AutoModelForCausalLM.from_pretrained(
         model_args.model_name_or_path
     )
