@@ -57,13 +57,22 @@ def main():
         peft_config=get_peft_config(model_args),
     )
     
-    # train and save the model
     train_result = trainer.train()
     metrics = train_result.metrics
     metrics["train_samples"] = len(dataset["train"])
     trainer.log_metrics("train", metrics)
     trainer.save_metrics("train", metrics)
     trainer.save_state()
+
+    ################
+    # Evaluation
+    ################
+    eval_metrics = trainer.evaluate()
+    eval_loss = eval_metrics.get("eval_loss", None)
+    if eval_loss is not None:
+        print(f"Eval Loss: {eval_loss}")
+        trainer.log_metrics("eval", eval_metrics)
+        trainer.save_metrics("eval", eval_metrics)
 
     # Save and push to hub
     trainer.save_model(training_args.output_dir)
