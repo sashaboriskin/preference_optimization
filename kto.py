@@ -34,6 +34,7 @@ def main():
     # Dataset
     ################
     dataset = load_dataset("csv", data_files=script_args.dataset_name)
+    dataset['train'] = dataset['train'].shuffle(seed=training_args.seed) 
     dataset['train'] = dataset['train'].map(split_prompt_completion_target)
     dataset = dataset['train'].train_test_split(test_size=0.2, seed=training_args.seed)
 
@@ -57,9 +58,19 @@ def main():
     train_result = trainer.train()
     metrics = train_result.metrics
     metrics["train_samples"] = len(dataset["train"])
+    metrics["test_samples"] = len(dataset["test"])
     trainer.log_metrics("train", metrics)
     trainer.save_metrics("train", metrics)
-    trainer.save_state()
+
+    ################
+    # Evaluation
+    ################
+    eval_metrics = trainer.evaluate()
+    eval_loss = eval_metrics.get("eval_loss", None)
+    if eval_loss is not None:
+        print(f"Eval Loss: {eval_loss}")
+        trainer.log_metrics("eval", eval_metrics)
+        trainer.save_metrics("eval", eval_metrics)
 
     # Save and push to hub
     trainer.save_model(training_args.output_dir)
