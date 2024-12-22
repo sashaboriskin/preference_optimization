@@ -6,4 +6,8 @@ def split_chosen_rejected(example):
     }
 
 def split_prompt_completion_target(example): 
-    pass
+    return {
+        "prompt": [item["content"] for item in eval(example["prompt"])][0],
+        "completion": [item["content"] for item in eval(example["completion"])][0],
+        "label": example["label"],
+    }
