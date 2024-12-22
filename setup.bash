@@ -11,5 +11,6 @@ git clone https://github.com/huggingface/alignment-handbook.git
 cd ./alignment-handbook/
 python -m pip install .
 
+pip uninstall bitsandbytes -y
 pip install bitsandbytes
 pip uninstall flash-attn
