@@ -36,12 +36,13 @@ Before running the script, ensure the following:
 
 - Correct Accelerate Configuration: Verify that the correct configuration for accelerate is set up.
 - Experiment Script Selection: Choose the appropriate Python script for the experiment:
-    •   dpo.py for Direct Preference Optimization.
-    •   kto.py for Kullback-Leibler-based Preference Optimization.
-	•   simpo.py for Simple Preference Optimization.
-- Experiment Configuration File: Confirm the corresponding yaml configuration file for the selected experiment is correctly set (e.g., trainig_configs/dpo_v1.yaml).
+	- dpo.py for Direct Preference Optimization.
+    - kto.py for Kullback-Leibler-based Preference Optimization.
+	- simpo.py for Simple Preference Optimization.
+- Experiment Configuration File: Confirm the corresponding yaml configuration file for the selected experiment is correctly set (e.g., `trainig_configs/dpo_v1.yaml`).
 
 The script will execute the training process and automatically:
+
 	1.	Merge the LoRA adapter with the base model.
 	2.	Save the final model in the `models/` directory.
 
