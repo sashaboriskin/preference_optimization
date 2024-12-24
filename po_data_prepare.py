@@ -75,9 +75,9 @@ def main():
 
     kto_data = data[(data['reviews.rating'] != 3) & (~data['id'].isin(exclude))]
 
-    kto_data['target'] = kto_data['reviews.rating'].apply(lambda x: True if x < 3 else False)
+    kto_data['label'] = kto_data['reviews.rating'].apply(lambda x: True if x < 3 else False)
 
-    kto_data = kto_data[['name', 'reviews.text', 'target']]
+    kto_data = kto_data[['name', 'reviews.text', 'label']]
 
     kto_data = kto_data.rename(
         columns={
