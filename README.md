@@ -1,13 +1,13 @@
 # preference_optimization
 
-This repository demonstrates various algorithms for preference optimization, including Direct Preference Optimization (DPO), Kullback-Leibler-based Preference Optimization (KTO), and Simple Preference Optimization (SimPO) using TRL trainers.
+This repository demonstrates various algorithms for preference optimization, including Direct Preference Optimization (DPO), Kahneman-Tversky-based Preference Optimization (KTO), and Simple Preference Optimization (SimPO) using TRL trainers.
 
 ## Experiment Overview
 
 The experiment aims to compare the effectiveness and convergence of the three preference optimization algorithms:
 
 - **DPO (Direct Preference Optimization)**
-- **KTO (Kullback-Leibler-based Preference Optimization)**
+- **KTO (Kahneman-Tversky-based Preference Optimization)**
 - **SimPO (Simple Preference Optimization)**
 
 The evaluation is based on the training loss and other performance metrics logged during the experiment.
@@ -37,7 +37,7 @@ Before running the script, ensure the following:
 - Correct Accelerate Configuration: Verify that the correct configuration for accelerate is set up.
 - Experiment Script Selection: Choose the appropriate Python script for the experiment:
 	- dpo.py for Direct Preference Optimization.
-    - kto.py for Kullback-Leibler-based Preference Optimization.
+    - kto.py for Kahneman-Tversky-based Preference Optimization.
 	- simpo.py for Simple Preference Optimization.
 - Experiment Configuration File: Confirm the corresponding yaml configuration file for the selected experiment is correctly set (e.g., `trainig_configs/dpo_v1.yaml`).
 
