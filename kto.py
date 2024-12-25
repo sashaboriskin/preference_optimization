@@ -34,7 +34,6 @@ def main():
     ################
     dataset = load_dataset("csv", data_files=script_args.dataset_name)
     dataset['train'] = dataset['train'].shuffle(seed=training_args.seed) 
-    # dataset['train'] = dataset['train'].map(split_prompt_completion_target)
     dataset = dataset['train'].train_test_split(test_size=0.2, seed=training_args.seed)
 
     dataset = DatasetDict({
