@@ -33,20 +33,25 @@ bash setup.sh
 
 ### 3. Run the Experiment
 
-To run the experiment, execute the `run_script.sh` file:
+To run the experiment, execute the `run_script.sh` file with needed py file and config:
+
+For example: 
 
 ```bash
-bash run_script.sh
+bash run_script.sh kto.py kto_v1.yaml
 ```
 
 Before running the script, ensure the following:
 
 - Correct Accelerate Configuration: Verify that the correct configuration for accelerate is set up.
 - Experiment Script Selection: Choose the appropriate Python script for the experiment:
-	- dpo.py for Direct Preference Optimization.
-    - kto.py for Kahneman-Tversky-based Preference Optimization.
-	- simpo.py for Simple Preference Optimization.
-- Experiment Configuration File: Confirm the corresponding yaml configuration file for the selected experiment is correctly set (e.g., `trainig_configs/dpo_v1.yaml`).
+	- `dpo.py` for Direct Preference Optimization.
+    - `kto.py` for Kahneman-Tversky-based Preference Optimization.
+	- `simpo.py` for Simple Preference Optimization.
+- Experiment Configuration File: Confirm the corresponding yaml configuration file for the selected experiment is correctly set:
+	- `dpo_v1.yaml` for Direct Preference Optimization.
+	- `kto_v1.yaml` for Kahneman-Tversky-based Preference Optimization.
+	- `simpo_v1.yaml` for Simple Preference Optimization.
 
 The script will execute the training process and automatically:
 
