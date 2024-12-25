@@ -16,20 +16,27 @@ The evaluation is based on the training loss and other performance metrics logge
 
 Follow the steps below to reproduce the experiment:
 
-### 1. Install Dependencies
+### 1. Data preparation
+
+Run script to preprocess kaggle data format to csv data format
+```python
+python po_data_prepare.py
+```
+
+### 2. Install Dependencies
 
 Ensure all required libraries are installed by running:
 
 ```bash
-bash setup.bash
+bash setup.sh
 ```
 
-### 2. Run the Experiment
+### 3. Run the Experiment
 
-To run the experiment, execute the `run_script.bash` file:
+To run the experiment, execute the `run_script.sh` file:
 
 ```bash
-bash run_script.bash
+bash run_script.sh
 ```
 
 Before running the script, ensure the following:
