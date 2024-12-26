@@ -1,0 +1,48 @@
+# model_args:
+model_name_or_path: Qwen/Qwen2.5-0.5B
+gradient_checkpointing: true
+gradient_checkpointing_kwargs:
+    use_reentrant: True
+use_peft: True
+lora_r: 16
+lora_dropout: 0.05
+lora_target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+
+resume_from_checkpoint: true
+
+# data_args:
+dataset_name: data/kto_dataset.csv
+
+# training_args:
+output_dir: models_raw/Qwen2.5-0.5B-v0.3_bf16_kto_v1
+run_name: Qwen2.5-0.5B-v0.3_bf16_kto_v1
+
+beta: 0.4
+num_train_epochs: 1
+max_steps: 500
+max_prompt_length: 512
+per_device_train_batch_size: 32
+per_device_eval_batch_size: 8
+learning_rate: 1.0e-6
+gradient_accumulation_steps: 1
+logging_steps: 10
+eval_steps: 50
+
+optim: adamw_torch
+lr_scheduler_type: cosine
+
+save_total_limit: 10
+seed: 42
+
+warmup_ratio: 0.1
+report_to:
+  - wandb
+fp16: True
+logging_first_step: True

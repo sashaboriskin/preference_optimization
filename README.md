@@ -67,7 +67,7 @@ The following results were observed during the experiment:
 ![DPO](images/dpo_train_loss.png)
 
 ### KTO
-![KTO](images/kto_train_loss.png)
+![KTO](images/kto_train_loss_v2.png)
 
 
 •	SimPO: This algorithm did not converge within the experiment’s settings.
